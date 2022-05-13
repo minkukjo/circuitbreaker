@@ -1,9 +1,18 @@
 resilience4j:
+  retry:
+    instances:
+      test:
+        max-attempts: 10
+        wait-duration: 3s
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - feign.FeignException
   circuitbreaker:
     configs:
       default:
         registerHealthIndicator: true
-        slidingWindowSize: 10
+        slidingWindowSize: 5
         minimumNumberofCalls: 5
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
@@ -13,8 +22,8 @@ resilience4j:
         ignoreException:
           - java.util.NoSuchElementException
     instances:
-      order:
-        minimumNumberOfCalls: 10
+      test:
+        minimumNumberOfCalls: 5
         waitDurationInOpenState: 3s
         failureRateThreshold: 10
 server:
@@ -24,5 +33,5 @@ feign:
   client:
     config:
       default:
-        connectTimeout: 5000
-        readTimeout: 5000
+        connectTimeout: 3000
+        readTimeout: 3000
